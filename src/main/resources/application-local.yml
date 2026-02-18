@@ -1,0 +1,9 @@
+spring:
+  datasource:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+app:
+  domain: http://localhost:8080
