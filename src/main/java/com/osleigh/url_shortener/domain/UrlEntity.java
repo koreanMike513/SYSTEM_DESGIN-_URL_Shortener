@@ -10,19 +10,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @Table(name = "urls")
+@SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access =  PROTECTED)
 public class UrlEntity extends BaseEntity {
 
   @Id
@@ -41,15 +41,21 @@ public class UrlEntity extends BaseEntity {
   private boolean isCustom;
 
   @Column(name = "expires_at")
-  private Timestamp expiresAt;
+  private LocalDateTime expiresAt;
 
-  public static UrlEntity create(UrlEntityCreateParam param) {
+  public static UrlEntity create(UrlCreateRequest param) {
     UrlEntity entity = new UrlEntity();
     entity.originalURL = param.originalURL();
     entity.shortCode = param.shortCode();
     entity.isCustom = param.isCustom();
-    entity.expiresAt = param.expiresAt();
+    entity.expiresAt = param.expiresAt() != null
+        ? param.expiresAt()
+        : LocalDateTime.now().plusDays(30);
     return entity;
+  }
+
+  public boolean isExpired() {
+    return expiresAt != null && expiresAt.isBefore(LocalDateTime.now());
   }
 
   public Boolean isCustomUrl() {

@@ -1,11 +1,10 @@
 package com.osleigh.url_shortener.domain;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-public record UrlEntityCreateParam(
+public record UrlCreateRequest(
     URL originalURL,
     String shortCode,
     boolean isCustom,
-    Timestamp expiresAt
-) {
-}
+    LocalDateTime expiresAt
+) {}

@@ -1,6 +1,7 @@
 package com.osleigh.url_shortener.service.strategy;
 
 import com.osleigh.url_shortener.dto.UrlShortenRequest;
+import com.osleigh.url_shortener.exception.ShortCodeGenerationException;
 import com.osleigh.url_shortener.service.strategy.collision.CollisionResolver;
 import com.osleigh.url_shortener.service.strategy.existence.ShortCodeExistenceChecker;
 import com.osleigh.url_shortener.service.strategy.generator.ShortCodeGenerator;
@@ -29,14 +30,15 @@ public class DefaultShortCodeResolveStrategy implements ShortCodeResolveStrategy
     }
 
     private String generateUniqueShortCode(String originalUrl) {
-        String shortCode = generator.generateShortCode(originalUrl);
+        String baseCode = generator.generateShortCode(originalUrl);
+        String shortCode = baseCode;
         int attempt = 0;
 
         while (existenceChecker.exists(shortCode)) {
             if (!retryPolicy.shouldRetry(++attempt)) {
-                throw new RuntimeException("shortCode 생성 실패");
+                throw new ShortCodeGenerationException("shortCode 생성 실패: 최대 재시도 횟수 초과");
             }
-            shortCode = collisionResolver.resolve(shortCode);
+            shortCode = collisionResolver.resolve(baseCode);
         }
         return shortCode;
     }

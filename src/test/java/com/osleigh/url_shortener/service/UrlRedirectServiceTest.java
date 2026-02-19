@@ -1,7 +1,7 @@
 package com.osleigh.url_shortener.service;
 
-import com.osleigh.url_shortener.code.URLEntityGenerator;
 import com.osleigh.url_shortener.domain.URL;
+import com.osleigh.url_shortener.domain.UrlCreateRequest;
 import com.osleigh.url_shortener.domain.UrlEntity;
 import com.osleigh.url_shortener.repository.UrlRedirectRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ class UrlRedirectServiceTest {
   @Test
   void givenShortCode_whenFindRedirectUrl_thenReturnOriginalUrl() {
     // given
-    UrlEntity urlEntity = URLEntityGenerator.createUrlEntity(1L, ORIGINAL_URL, SHORT_CODE, false);
+    UrlEntity urlEntity = UrlEntity.create(new UrlCreateRequest(new URL(ORIGINAL_URL), SHORT_CODE, false, null));
 
     given(urlRedirectRepository.findByShortCode(SHORT_CODE))
         .willReturn(Optional.of(urlEntity));

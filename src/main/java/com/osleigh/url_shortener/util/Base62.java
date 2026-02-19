@@ -16,6 +16,8 @@ public abstract class Base62 {
   public static String encode(long value) {
     StringBuilder sb = new StringBuilder();
 
+    if (value == 0) return "0";
+
     while (value > 0) {
       int remainder = (int) (value % BASE);
       sb.append(BASE62_CHARACTERS[remainder]);

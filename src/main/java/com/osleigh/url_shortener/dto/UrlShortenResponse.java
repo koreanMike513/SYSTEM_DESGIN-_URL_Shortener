@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -23,11 +23,11 @@ public class UrlShortenResponse {
 
   private boolean isCustom;
 
-  private Timestamp createdAt;
+  private LocalDateTime createdAt;
 
-  private Timestamp updatedAt;
+  private LocalDateTime updatedAt;
 
-  private Timestamp expiresAt;
+  private LocalDateTime expiresAt;
 
   public static UrlShortenResponse fromEntity(UrlEntity entity, String host) {
     return new UrlShortenResponse(

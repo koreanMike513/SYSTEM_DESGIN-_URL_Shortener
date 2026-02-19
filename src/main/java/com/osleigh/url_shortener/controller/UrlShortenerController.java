@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class UrlShortenerController {
   private final UrlShortenerService urlShortenerService;
 
   @PostMapping("/shorten")
-  public ResponseEntity<UrlShortenResponse> shortenUrl(@Valid @org.springframework.web.bind.annotation.RequestBody UrlShortenRequest request) {
+  public ResponseEntity<UrlShortenResponse> shortenUrl(@Valid @RequestBody UrlShortenRequest request) {
     UrlShortenResponse response = urlShortenerService.shortenUrl(request);
     return ResponseEntity.ok(response);
   }

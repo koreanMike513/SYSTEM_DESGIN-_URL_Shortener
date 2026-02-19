@@ -3,12 +3,10 @@ package com.osleigh.url_shortener.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.osleigh.url_shortener.code.URLEntityGenerator.createUrlEntity;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UrlEntityTest {
 
-  private static final long ID = 1L;
   private static final String ORIGINAL_URL = "https://www.naver.com";
   private static final String SHORT_CODE = "abc123";
 
@@ -16,7 +14,7 @@ class UrlEntityTest {
   @Test
   void givenUrlEntity_whenCreateWithCustom_thenReturnTrueForIsCustom() {
     // given & when
-    UrlEntity urlEntity = createUrlEntity(ID, ORIGINAL_URL, SHORT_CODE, true);
+    UrlEntity urlEntity = UrlEntity.create(new UrlCreateRequest(new URL(ORIGINAL_URL), SHORT_CODE, true, null));
 
     // then
     assertTrue(urlEntity.isCustom());
@@ -26,7 +24,7 @@ class UrlEntityTest {
   @Test
   void givenUrlEntity_whenCreateWithCustom_thenReturnTrueForIsNotCustom() {
     // given & when
-    UrlEntity urlEntity = createUrlEntity(ID, ORIGINAL_URL, SHORT_CODE, false);
+    UrlEntity urlEntity = UrlEntity.create(new UrlCreateRequest(new URL(ORIGINAL_URL), SHORT_CODE, false, null));
 
     // then
     assertFalse(urlEntity.isCustom());

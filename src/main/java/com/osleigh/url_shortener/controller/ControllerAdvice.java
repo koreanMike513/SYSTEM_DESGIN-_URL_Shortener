@@ -1,6 +1,8 @@
 package com.osleigh.url_shortener.controller;
 
 
+import com.osleigh.url_shortener.exception.ShortCodeGenerationException;
+import com.osleigh.url_shortener.exception.UrlExpiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,24 @@ public class ControllerAdvice {
     logger.error(e.getMessage(), e);
     ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
     problemDetail.setTitle("Conflict");
+    return problemDetail;
+  }
+
+  @ResponseStatus(HttpStatus.GONE)
+  @ExceptionHandler(UrlExpiredException.class)
+  public ProblemDetail handleException(UrlExpiredException e) {
+    logger.warn(e.getMessage());
+    ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.GONE, e.getMessage());
+    problemDetail.setTitle("URL Expired");
+    return problemDetail;
+  }
+
+  @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+  @ExceptionHandler(ShortCodeGenerationException.class)
+  public ProblemDetail handleException(ShortCodeGenerationException e) {
+    logger.error(e.getMessage(), e);
+    ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+    problemDetail.setTitle("Service Unavailable");
     return problemDetail;
   }
 
