@@ -1,4 +1,4 @@
-package com.osleigh.url_shortener.service.strategy;
+package com.osleigh.url_shortener.service.strategy.generator;
 
 public interface ShortCodeGenerator {
 

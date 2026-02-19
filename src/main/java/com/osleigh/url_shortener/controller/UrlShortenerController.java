@@ -19,7 +19,7 @@ public class UrlShortenerController {
   private final UrlShortenerService urlShortenerService;
 
   @PostMapping("/shorten")
-  public ResponseEntity<UrlShortenResponse> shortenUrl(@Valid UrlShortenRequest request) {
+  public ResponseEntity<UrlShortenResponse> shortenUrl(@Valid @org.springframework.web.bind.annotation.RequestBody UrlShortenRequest request) {
     UrlShortenResponse response = urlShortenerService.shortenUrl(request);
     return ResponseEntity.ok(response);
   }

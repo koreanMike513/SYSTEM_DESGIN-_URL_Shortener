@@ -41,9 +41,17 @@ dependencies {
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-	// Redis 설정
-	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-	testImplementation("org.springframework.boot:spring-boot-starter-data-redis-test")
+	// Testcontainers support
+	testImplementation("org.springframework.boot:spring-boot-testcontainers")
+
+	// Testcontainers
+	testImplementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
+	testImplementation("org.testcontainers:junit-jupiter")
+	testImplementation("org.testcontainers:mysql")
+	testImplementation("com.redis:testcontainers-redis:2.2.4")
+
+	// MySQL JDBC driver for integration tests
+	testRuntimeOnly("com.mysql:mysql-connector-j")
 }
 
 tasks.withType<Test> {

@@ -1,4 +1,4 @@
-package com.osleigh.url_shortener.service.strategy;
+package com.osleigh.url_shortener.service.strategy.generator;
 
 import com.osleigh.url_shortener.util.Base62;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +15,10 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class SequenceBasedShortCodeGeneratorTest {
+
+  private static final String TEST_URL = "https://www.example.com";
+  private static final long TEST_SEQUENCE = 1789374897329878954L;
+  private static final String SEQUENCE_KEY = "url_shortener_sequence";
 
   @Mock
   private RedisTemplate<String, Object> redisTemplate;
@@ -33,15 +37,13 @@ class SequenceBasedShortCodeGeneratorTest {
   @Test
   void givenTestUrl_whenGenerateShortCode_thenReturnShortCode() {
     // given
-    String testUrl = "https://www.example.com";
-    long testSequence = 1789374897329878954L;
-    String expected = Base62.encode(testSequence);
+    String expected = Base62.encode(TEST_SEQUENCE);
 
     given(redisTemplate.opsForValue()).willReturn(valueOperations);
-    given(valueOperations.increment("url:sequence")).willReturn(testSequence);
+    given(valueOperations.increment(SEQUENCE_KEY)).willReturn(TEST_SEQUENCE);
 
     // when
-    String result = sequenceBasedShortCodeGenerator.generateShortCode(testUrl);
+    String result = sequenceBasedShortCodeGenerator.generateShortCode(TEST_URL);
 
     // then
     assertThat(result).isEqualTo(expected);

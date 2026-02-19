@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+app:
+  domain: http://localhost:8080

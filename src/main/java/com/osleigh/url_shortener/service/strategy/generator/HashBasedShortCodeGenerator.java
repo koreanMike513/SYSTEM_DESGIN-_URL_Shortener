@@ -1,4 +1,4 @@
-package com.osleigh.url_shortener.service.strategy;
+package com.osleigh.url_shortener.service.strategy.generator;
 
 import com.osleigh.url_shortener.util.Base62;
 

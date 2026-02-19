@@ -4,6 +4,7 @@ import com.osleigh.url_shortener.domain.URL;
 import com.osleigh.url_shortener.domain.UrlEntity;
 import com.osleigh.url_shortener.domain.UrlEntityCreateParam;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,6 +13,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class UrlShortenRequest {
 
   @NotBlank(message = "원본 URL은 필수입니다")
@@ -19,7 +21,7 @@ public class UrlShortenRequest {
 
   private String alias;
 
-  public Boolean isCustomRequest() {
+  public boolean isCustomRequest() {
     return alias != null;
   }
 

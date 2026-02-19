@@ -17,6 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UrlRedirectController.class)
 class UrlRedirectControllerTest {
 
+  private static final String SHORT_CODE = "abc123";
+  private static final String ORIGINAL_URL = "https://www.example.com";
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -28,14 +31,11 @@ class UrlRedirectControllerTest {
   @Test
   void givenShortCode_whenRequestedForRedirect_thenRedirect() throws Exception {
     // given
-    String shortCode = "abc123";
-    String mockUrl = "https://www.example.com";
-
-    given(urlRedirectService.findRedirectUrl(shortCode))
-        .willReturn(new URL(mockUrl));
+    given(urlRedirectService.findRedirectUrl(SHORT_CODE))
+        .willReturn(new URL(ORIGINAL_URL));
 
     // when & then
-    mockMvc.perform(MockMvcRequestBuilders.get("/" + shortCode))
+    mockMvc.perform(MockMvcRequestBuilders.get("/" + SHORT_CODE))
         .andExpect(status().is3xxRedirection());
   }
 }

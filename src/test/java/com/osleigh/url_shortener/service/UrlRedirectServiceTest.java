@@ -20,6 +20,10 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class UrlRedirectServiceTest {
 
+  private static final String SHORT_CODE = "abc123";
+  private static final String ORIGINAL_URL = "https://www.naver.com";
+  private static final String NON_EXISTENT_SHORT_CODE = "nonexistent";
+
   @Mock
   private UrlRedirectRepository urlRedirectRepository;
 
@@ -34,31 +38,27 @@ class UrlRedirectServiceTest {
   @Test
   void givenShortCode_whenFindRedirectUrl_thenReturnOriginalUrl() {
     // given
-    String shortCode = "abc123";
-    String originalUrl = "https://www.naver.com";
-    UrlEntity urlEntity = URLEntityGenerator.createUrlEntity(1L, originalUrl, shortCode, false);
+    UrlEntity urlEntity = URLEntityGenerator.createUrlEntity(1L, ORIGINAL_URL, SHORT_CODE, false);
 
-    given(urlRedirectRepository.findByShortCode(shortCode))
+    given(urlRedirectRepository.findByShortCode(SHORT_CODE))
         .willReturn(Optional.of(urlEntity));
 
     // when
-    URL result = urlRedirectService.findRedirectUrl(shortCode);
+    URL result = urlRedirectService.findRedirectUrl(SHORT_CODE);
 
     // then
-    assertThat(result).isEqualTo(new URL(originalUrl));
+    assertThat(result).isEqualTo(new URL(ORIGINAL_URL));
   }
 
   @DisplayName("존재하지 않는 단축 코드가 주어졌을 때, findRedirectUrl을 호출하면, 예외를 던져야 한다.")
   @Test
   void givenNonExistentShortCode_whenFindRedirectUrl_thenThrowException() {
     // given
-    String shortCode = "nonexistent";
-
-    given(urlRedirectRepository.findByShortCode(shortCode))
+    given(urlRedirectRepository.findByShortCode(NON_EXISTENT_SHORT_CODE))
         .willReturn(Optional.empty());
 
     // when & then
-    assertThatThrownBy(() -> urlRedirectService.findRedirectUrl(shortCode))
+    assertThatThrownBy(() -> urlRedirectService.findRedirectUrl(NON_EXISTENT_SHORT_CODE))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("해당 단축 URL이 존재하지 않습니다.");
   }
