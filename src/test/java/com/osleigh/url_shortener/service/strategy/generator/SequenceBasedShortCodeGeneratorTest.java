@@ -16,7 +16,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class SequenceBasedShortCodeGeneratorTest {
 
-  private static final String TEST_URL = "https://www.example.com";
   private static final long TEST_SEQUENCE = 1789374897329878954L;
   private static final String SEQUENCE_KEY = "url_shortener_sequence";
 
@@ -33,9 +32,9 @@ class SequenceBasedShortCodeGeneratorTest {
     sequenceBasedShortCodeGenerator = new SequenceBasedShortCodeGenerator(redisTemplate);
   }
 
-  @DisplayName("URL이 주어졌을 때, generateShortCode를 호출하면, 기대하는 short code를 반환해야 한다.")
+  @DisplayName("generate를 호출하면, Redis 시퀀스 기반의 short code를 반환해야 한다.")
   @Test
-  void givenTestUrl_whenGenerateShortCode_thenReturnShortCode() {
+  void whenGenerate_thenReturnSequenceBasedShortCode() {
     // given
     String expected = Base62.encode(TEST_SEQUENCE);
 
@@ -43,7 +42,7 @@ class SequenceBasedShortCodeGeneratorTest {
     given(valueOperations.increment(SEQUENCE_KEY)).willReturn(TEST_SEQUENCE);
 
     // when
-    String result = sequenceBasedShortCodeGenerator.generateShortCode(TEST_URL);
+    String result = sequenceBasedShortCodeGenerator.generate();
 
     // then
     assertThat(result).isEqualTo(expected);

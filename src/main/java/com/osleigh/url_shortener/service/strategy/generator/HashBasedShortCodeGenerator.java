@@ -2,12 +2,11 @@ package com.osleigh.url_shortener.service.strategy.generator;
 
 import com.osleigh.url_shortener.util.Base62;
 
-
-public class HashBasedShortCodeGenerator implements ShortCodeGenerator {
+public class HashBasedShortCodeGenerator implements DeterministicCodeGenerator {
 
   @Override
-  public String generateShortCode(String value) {
-    long hashValue = hash(value);
+  public String generate(String url) {
+    long hashValue = hash(url);
     return Base62.encode(hashValue);
   }
 

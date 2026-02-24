@@ -1,14 +1,12 @@
 package com.osleigh.url_shortener.service.strategy;
 
-import com.osleigh.url_shortener.repository.UrlShortenerRepository;
+import com.osleigh.url_shortener.repository.UrlRepository;
 import com.osleigh.url_shortener.service.strategy.collision.CollisionResolver;
 import com.osleigh.url_shortener.service.strategy.collision.RandomSuffixCollisionResolver;
 import com.osleigh.url_shortener.service.strategy.existence.RepositoryShortCodeExistenceChecker;
 import com.osleigh.url_shortener.service.strategy.existence.ShortCodeExistenceChecker;
+import com.osleigh.url_shortener.service.strategy.generator.DeterministicCodeGenerator;
 import com.osleigh.url_shortener.service.strategy.generator.HashBasedShortCodeGenerator;
-import com.osleigh.url_shortener.service.strategy.generator.ShortCodeGenerator;
-import com.osleigh.url_shortener.service.strategy.retry.FixedRetryPolicy;
-import com.osleigh.url_shortener.service.strategy.retry.RetryPolicy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class ShortCodeResolveStrategyConfig {
 
   @Bean
-  public ShortCodeGenerator shortCodeGenerator() {
+  public DeterministicCodeGenerator codeGenerator() {
     return new HashBasedShortCodeGenerator();
   }
 
@@ -26,27 +24,15 @@ public class ShortCodeResolveStrategyConfig {
   }
 
   @Bean
-  public RetryPolicy retryPolicy() {
-    return new FixedRetryPolicy();
-  }
-
-  @Bean
-  public ShortCodeExistenceChecker shortCodeExistenceChecker(UrlShortenerRepository urlShortenerRepository) {
-    return new RepositoryShortCodeExistenceChecker(urlShortenerRepository);
+  public ShortCodeExistenceChecker shortCodeExistenceChecker(UrlRepository urlRepository) {
+    return new RepositoryShortCodeExistenceChecker(urlRepository);
   }
 
   @Bean
   public ShortCodeResolveStrategy shortCodeResolveStrategy(
-      ShortCodeGenerator shortCodeGenerator,
-      CollisionResolver collisionResolver,
-      RetryPolicy retryPolicy,
+      DeterministicCodeGenerator codeGenerator,
       ShortCodeExistenceChecker shortCodeExistenceChecker
   ) {
-    return new DefaultShortCodeResolveStrategy(
-        shortCodeGenerator,
-        collisionResolver,
-        retryPolicy,
-        shortCodeExistenceChecker
-    );
+    return new StrictShortCodeResolveStrategy(codeGenerator, shortCodeExistenceChecker);
   }
 }

@@ -1,9 +1,10 @@
 package com.osleigh.url_shortener.domain;
 
 import jakarta.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
-public record URL(String url) {
+public record URL(String url) implements Serializable {
 
   public static final String URL_REGEX
       = "^(https?)://([\\w-]+\\.)+[a-zA-Z]{2,}(/[\\w-./?%&=]*)?$";
