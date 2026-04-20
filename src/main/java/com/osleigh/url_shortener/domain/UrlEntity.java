@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,13 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@Table(name = "urls")
+@Table(
+    name = "urls",
+    indexes = {
+        @Index(name = "idx_urls_is_deleted", columnList = "is_deleted"),
+        @Index(name = "idx_urls_expires_at", columnList = "expires_at")
+    }
+)
 @SQLRestriction("is_deleted = false")
 @NoArgsConstructor(access = PROTECTED)
 public class UrlEntity extends BaseEntity {

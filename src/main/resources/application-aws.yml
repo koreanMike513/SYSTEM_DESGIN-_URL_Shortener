@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 50       # Fargate 2vCPU 기준, DB 커넥션 풀
+      minimum-idle: 10
+      connection-timeout: 3000
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST}
+      port: 6379
+
+  jpa:
+    hibernate:
+      ddl-auto: validate            # AWS에서는 validate (스키마 수동 관리)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+app:
+  host: ${APP_HOST}

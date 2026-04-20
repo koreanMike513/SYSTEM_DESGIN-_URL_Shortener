@@ -52,7 +52,7 @@ dependencies {
 	testImplementation("com.redis:testcontainers-redis:2.2.4")
 
 	// MySQL JDBC driver for integration tests
-	testRuntimeOnly("com.mysql:mysql-connector-j")
+	runtimeOnly("com.mysql:mysql-connector-j")
 }
 
 tasks.withType<Test> {

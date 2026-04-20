@@ -1,28 +1,29 @@
 package com.osleigh.url_shortener.service.strategy.generator;
 
+import com.osleigh.url_shortener.exception.ShortCodeGenerationException;
 import com.osleigh.url_shortener.util.Base62;
 
-public class HashBasedShortCodeGenerator implements DeterministicCodeGenerator {
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+// SHA-256 상위 63비트 사용 → 약 9.2 * 10^18 공간, hashCode() 32비트 대비 충돌 확률 대폭 감소
+public class HashBasedShortCodeGenerator implements ShortCodeGenerator {
 
   @Override
   public String generate(String url) {
-    long hashValue = hash(url);
-    return Base62.encode(hashValue);
+    return Base62.encode(hash(url));
   }
 
-  /**
-   * 동작 원리:
-   *
-   * hashCode()는 int 타입이라 음수가 나올 수 있음
-   * 0xffffffffL은 32비트가 모두 1인 long 값 (4294967295)
-   * AND 연산으로 int의 비트 패턴을 그대로 유지하면서 long으로 변환
-   * 결과: 음수 int가 0~4294967295 범위의 양수 long이 됨
-   *
-   * 예시:
-   * javaint negative = -1;                   // 비트: 11111111 11111111 11111111 11111111
-   * long positive = negative & 0xffffffffL;  // 4294967295
-   */
   private long hash(String url) {
-    return url.hashCode() & 0xffffffffL;
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] bytes = digest.digest(url.getBytes(StandardCharsets.UTF_8));
+      // 상위 8바이트를 long으로 변환, Long.MAX_VALUE로 음수 방지
+      return ByteBuffer.wrap(bytes, 0, 8).getLong() & Long.MAX_VALUE;
+    } catch (NoSuchAlgorithmException e) {
+      throw new ShortCodeGenerationException("SHA-256 알고리즘을 사용할 수 없습니다", e);
+    }
   }
 }

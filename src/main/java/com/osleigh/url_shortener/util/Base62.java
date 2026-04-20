@@ -1,5 +1,8 @@
 package com.osleigh.url_shortener.util;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+
 public abstract class Base62 {
 
   private static final int BASE = 62;
@@ -28,7 +31,7 @@ public abstract class Base62 {
   }
 
   public static String getRandomCharacter() {
-    int index = (int) (Math.random() * BASE);
+    int index = ThreadLocalRandom.current().nextInt(BASE);
     return BASE62_CHARACTERS[index];
   }
 }

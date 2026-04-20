@@ -8,18 +8,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HashBasedShortCodeGeneratorTest {
 
-  private static final String TEST_URL = "https://www.google.com/search?q=hash+based+short+code+generator&oq=hash+based+short+code+generator&aqs=chrome..69i57j0i512l9.1221j0j7&sourceid=chrome&ie=UTF-8";
-  private static final String EXPECTED_SHORT_CODE = "KPGlN1";
+  private static final String TEST_URL = "https://www.google.com/search?q=hash+based+short+code+generator";
+  private static final String DIFFERENT_URL = "https://www.github.com";
 
-  final DeterministicCodeGenerator codeGenerator = new HashBasedShortCodeGenerator();
+  final ShortCodeGenerator codeGenerator = new HashBasedShortCodeGenerator();
 
-  @DisplayName("URL이 주어졌을 때, generate를 호출하면, 기대하는 short code를 반환해야 한다.")
+  @DisplayName("같은 URL이 주어지면 항상 동일한 short code를 반환한다.")
   @Test
-  void givenTestUrl_whenGenerate_thenReturnShortCode() {
+  void givenSameUrl_whenGenerateTwice_thenReturnSameShortCode() {
     // given & when
-    String result = codeGenerator.generate(TEST_URL);
+    String first = codeGenerator.generate(TEST_URL);
+    String second = codeGenerator.generate(TEST_URL);
 
     // then
-    assertThat(result).isEqualTo(EXPECTED_SHORT_CODE);
+    assertThat(first).isEqualTo(second);
+  }
+
+  @DisplayName("다른 URL이 주어지면 다른 short code를 반환한다.")
+  @Test
+  void givenDifferentUrls_whenGenerate_thenReturnDifferentShortCodes() {
+    // given & when
+    String code1 = codeGenerator.generate(TEST_URL);
+    String code2 = codeGenerator.generate(DIFFERENT_URL);
+
+    // then
+    assertThat(code1).isNotEqualTo(code2);
   }
 }

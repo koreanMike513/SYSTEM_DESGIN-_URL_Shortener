@@ -42,7 +42,7 @@ class SequenceBasedShortCodeGeneratorTest {
     given(valueOperations.increment(SEQUENCE_KEY)).willReturn(TEST_SEQUENCE);
 
     // when
-    String result = sequenceBasedShortCodeGenerator.generate();
+    String result = sequenceBasedShortCodeGenerator.generate("https://example.com");
 
     // then
     assertThat(result).isEqualTo(expected);

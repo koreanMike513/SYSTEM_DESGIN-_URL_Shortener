@@ -5,39 +5,34 @@ import org.junit.jupiter.api.Test;
 
 import static com.osleigh.url_shortener.domain.URL.URL_INVALID_FORMAT_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class URLVoTest {
 
-  @DisplayName("url 형식이 맞는 경우 url 객체를 생성할 수 있다.")
+  @DisplayName("유효한 URL이 주어지면 URL 객체를 생성한다.")
   @Test
   void givenValidUrlFormat_whenCreateUrl_thenSuccess() {
     String url = "https://www.naver.com";
-    URL URL = new URL(url);
+    URL result = new URL(url);
 
-    assertThat(URL.url()).isEqualTo(url);
+    assertThat(result.url()).isEqualTo(url);
   }
 
-  @DisplayName("url이 null인 경우 IllegalArgumentException 예외가 발생한다.")
+  @DisplayName("URL이 null이면 IllegalArgumentException을 던진다.")
   @Test
-  void givenNullValueToUrl_whenCreateUrl_thenThrowIllegalArgumentExceptionWithSpecificMessage() {
-    String url = null;
-
-    try {
-      new URL(url);
-    } catch (IllegalArgumentException e) {
-      assertThat(e.getMessage()).isEqualTo(URL_INVALID_FORMAT_MESSAGE.formatted(url));
-    }
+  void givenNullUrl_whenCreateUrl_thenThrowIllegalArgumentException() {
+    assertThatThrownBy(() -> new URL(null))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(URL_INVALID_FORMAT_MESSAGE.formatted((Object) null));
   }
 
-  @DisplayName("url 형식이 맞지 않는 경우 IllegalArgumentException 예외가 발생한다.")
+  @DisplayName("스킴이 없는 URL이 주어지면 IllegalArgumentException을 던진다.")
   @Test
-  void givenMisingScheme_whenCreateUrl_thenThrowIllegalArgumentExceptionWithSpecificMessage() {
+  void givenUrlWithoutScheme_whenCreateUrl_thenThrowIllegalArgumentException() {
     String url = "//www.naver.com";
 
-    try {
-      new URL(url);
-    } catch (IllegalArgumentException e) {
-      assertThat(e.getMessage()).isEqualTo(URL_INVALID_FORMAT_MESSAGE.formatted(url));
-    }
+    assertThatThrownBy(() -> new URL(url))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(URL_INVALID_FORMAT_MESSAGE.formatted(url));
   }
 }

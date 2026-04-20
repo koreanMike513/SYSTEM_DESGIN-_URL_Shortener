@@ -29,7 +29,7 @@ class UrlRedirectControllerIntegrationTestEnvironment extends IntegrationTestEnv
   @Test
   void givenExistingShortCode_whenRedirect_thenReturn302WithLocation() throws Exception {
     // given
-    urlShortenerService.shortenUrl(new UrlShortenRequest(ORIGINAL_URL, SHORT_CODE));
+    urlShortenerService.shorten(new UrlShortenRequest(ORIGINAL_URL, SHORT_CODE, null));
 
     // when & then
     mockMvc.perform(get("/{shortCode}", SHORT_CODE))

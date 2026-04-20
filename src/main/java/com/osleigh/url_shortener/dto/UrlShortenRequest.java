@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @ToString
@@ -21,11 +23,13 @@ public class UrlShortenRequest {
 
   private String alias;
 
+  private LocalDateTime expiresAt;
+
   public boolean isCustomRequest() {
     return alias != null && !alias.isBlank();
   }
 
   public UrlEntity toEntity(String shortCode) {
-    return UrlEntity.create(new UrlCreateRequest(new URL(originalURL), shortCode, isCustomRequest(), null));
+    return UrlEntity.create(new UrlCreateRequest(new URL(originalURL), shortCode, isCustomRequest(), expiresAt));
   }
 }

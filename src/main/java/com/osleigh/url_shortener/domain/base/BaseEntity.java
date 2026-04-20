@@ -25,4 +25,8 @@ public class BaseEntity {
 
   @Column(nullable = false)
   private boolean isDeleted;
+
+  public void softDelete() {
+    this.isDeleted = true;
+  }
 }

@@ -7,4 +7,4 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
 
 app:
-  domain: http://localhost:8080
+  host: http://localhost:8080

@@ -1,6 +1,6 @@
 package com.osleigh.url_shortener.service.strategy.generator;
 
-public interface DeterministicCodeGenerator {
+public interface ShortCodeGenerator {
 
     String generate(String url);
 }

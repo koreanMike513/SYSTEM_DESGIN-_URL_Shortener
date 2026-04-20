@@ -15,4 +15,4 @@ spring:
       port: 6379
 
 app:
-  domain: http://localhost:8080
+  host: http://localhost:8080
